@@ -1,0 +1,13 @@
+---
+- name: Pull data
+  block:
+    - name: Pull files using rsync
+      become: yes
+      ansible.posix.synchronize:
+        src: '{{ item.value.path }}'
+        dest: "{{ [playbook_dir, 'data', item.value.path | basename ] | path_join }}"
+        delete: true
+        mode: pull
+      loop: '{{ data_dirs | dict2items }}'
+      when: item.value.pull
+  when: data_pull
