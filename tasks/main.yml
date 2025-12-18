@@ -8,6 +8,5 @@
         dest: "{{ [playbook_dir, 'data'] | path_join }}"
         delete: true
         mode: pull
-      loop: '{{ data_dirs | dict2items }}'
-      when: item.value.pull
+      loop: "{{ data_dirs | dict2items | selectattr('value.pull') }}"
   when: data_pull
