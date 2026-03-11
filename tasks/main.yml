@@ -1,17 +1,6 @@
 ---
 - name: Pull data
   block:
-    - name: Ensure directories that are not pulled
-      become: yes
-      delegate_to: localhost
-      ansible.builtin.file:
-        path: "{{ [playbook_dir, 'data', item.value.path | basename ] | path_join }}"
-        state: directory
-        owner: '{{ item.value.owner | default(1000) }}'
-        group: '{{ item.value.group | default(1000) }}'
-        mode: "{{ item.value.mode | default('0750') }}"
-      loop: "{{ data_dirs | dict2items | rejectattr('value.pull') }}"
-
     - name: Pull files using rsync
       become: yes
       ansible.posix.synchronize:
